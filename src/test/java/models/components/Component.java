@@ -25,6 +25,10 @@ public class Component {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
+    public WebElement getComponent(){
+        return component;
+    }
+
     public WebElement findElement(By by){
         return component.findElement(by);
     }
@@ -57,7 +61,10 @@ public class Component {
             e.printStackTrace();
         }
 
-        List<WebElement> results = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(cssSelector)));
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(cssSelector)));
+        List<WebElement> results = component.findElements(By.cssSelector(cssSelector));
+
+
         List<T> components  = results.stream().map(webElement -> {
             try {
                 return constructor.newInstance(driver, webElement);
